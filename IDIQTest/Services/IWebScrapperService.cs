@@ -5,7 +5,6 @@ namespace IDIQTest.Domain.Services
 {
     public interface IWebScrapperService
     {
-        Task<ScrapResult> GetContentAsync(string uri);
-
+        Task<ScrapResult> GetContentAsync(string url);
     }
 }

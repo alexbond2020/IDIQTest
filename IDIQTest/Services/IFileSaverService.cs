@@ -5,6 +5,6 @@ namespace IDIQTest.Domain.Services
 {
     public interface IFileSaverService
     {
-        Task SaveContentAsync(ScrapResult result);
+        Task SaveContentAsync(ScrapResultForFile result);
     }
 }

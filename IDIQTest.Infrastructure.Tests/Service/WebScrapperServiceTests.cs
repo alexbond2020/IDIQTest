@@ -49,7 +49,7 @@ namespace IDIQTest.Infrastructure.Tests.Service
 
         [Theory]
         [InlineData("https://wrong_url.com/")]
-        public async Task Should_Throw_WebSiteNotAvailableException_For_Wrong_Url_Format(string url)
+        public async Task Should_Throw_WebSiteNotAvailableException_For_Wrong_Url(string url)
         {
             // Act 
             Task act() => _service.GetContentAsync(url);
@@ -60,7 +60,7 @@ namespace IDIQTest.Infrastructure.Tests.Service
         }
 
         [Fact]
-        public async Task Should_Retutn_String_Content ()
+        public async Task Should_Return_String_Content ()
         {
             //Arrange
             var url = @"https://www.w3.org/Provider/Style/dummy.html";

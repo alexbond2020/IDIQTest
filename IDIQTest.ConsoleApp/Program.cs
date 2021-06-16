@@ -16,12 +16,19 @@ namespace IDIQTest.ConsoleApp
         private static IWebScrapperService _webScrapperService;
         private static IFileSaverService _fileSaverService;
 
+
         public static void Main(string[] args)
         {
             SetupApplication();
             MainAsync(args).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Async Main method.
+        /// Allows to scrap the content either from command line or from configuration file
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         private static async Task MainAsync(string[] args)
         {
             var urls = args.Length > 0
@@ -43,12 +50,18 @@ namespace IDIQTest.ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Scraps the content of one single Url 
+        /// and saves the result to the file
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         private static async Task ScrapUrl(string url)
         {
             try
             {
                 var scrapResult = await _webScrapperService.GetContentAsync(url);
-                await _fileSaverService.SaveContentAsync(scrapResult);
+                await _fileSaverService.SaveContentAsync(new Domain.Model.ScrapResultForFile(scrapResult));
                 Console.WriteLine($"{url}. Scraping completed");
             }
             catch(Exception ex)
@@ -56,6 +69,10 @@ namespace IDIQTest.ConsoleApp
                 Console.WriteLine($"{url}. Scraping failed. {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Method initializes  necessary services for scraping process
+        /// </summary>
 
         private static void SetupApplication()
         {
@@ -70,14 +87,17 @@ namespace IDIQTest.ConsoleApp
             _fileSaverService = new FileSaverService(_baseDirectory);
         }
 
+        /// <summary>
+        /// Method reads a configuration from appsettings.json and saves settings into
+        /// Configuration instance
+        /// </summary>
         private static void GetConfigurationSettings()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false);
 
-            IConfiguration config = builder.Build();
-
+            var config = builder.Build();
             _configSettings = config.GetSection("Configuration").Get<Configuration>();
         }
     }

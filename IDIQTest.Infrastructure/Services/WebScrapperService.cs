@@ -2,10 +2,7 @@
 using IDIQTest.Domain.Model;
 using IDIQTest.Domain.Services;
 using System;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace IDIQTest.Infrastructure.Services
@@ -14,6 +11,11 @@ namespace IDIQTest.Infrastructure.Services
     {
         private readonly HttpClient _httpClient = new HttpClient();
 
+        /// <summary>
+        /// Validates url, sending request to url, prepares result
+        /// </summary>
+        /// <param name="url">string Url</param>
+        /// <returns>Result of scrapping</returns>
         public async Task<ScrapResult> GetContentAsync(string url)
         {
             ValidateUrl(url);
@@ -22,12 +24,11 @@ namespace IDIQTest.Infrastructure.Services
             return new ScrapResult(url, content);
         }
 
-        public string GetFileNameByUrl(string url)
-        {
-            var fileName = Regex.Replace(url, "[^a-zA-Z0-9_]+", "_", RegexOptions.Compiled);
-            return $"{fileName}.html";
-        }
-
+        /// <summary>
+        /// Sends request through HttpClint to Url and returns content.
+        /// </summary>
+        /// <param name="request">HttpRequest. Method type and Url</param>
+        /// <returns>Stirng web content</returns>
         private async Task<string> SendUrlRequest(HttpRequestMessage request)
         {
             try
@@ -39,12 +40,16 @@ namespace IDIQTest.Infrastructure.Services
                 }
                 return await response.Content.ReadAsStringAsync();
             }
-            catch
+            catch(Exception ex)
             {
-                throw new NotAvailableUrlException();
+                throw new NotAvailableUrlException(ex);
             }
         }
 
+        /// <summary>
+        /// Validates the url if it is http url, throws an exception depends on the validation error
+        /// </summary>
+        /// <param name="url">String Url</param>
         private void ValidateUrl(string url)
         {
             if (string.IsNullOrEmpty(url))
