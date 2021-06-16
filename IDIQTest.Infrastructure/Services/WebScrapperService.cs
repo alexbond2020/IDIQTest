@@ -1,6 +1,7 @@
 ﻿using IDIQTest.Domain.Exceptions;
 using IDIQTest.Domain.Model;
 using IDIQTest.Domain.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,6 +11,12 @@ namespace IDIQTest.Infrastructure.Services
     public class WebScrapperService : IWebScrapperService
     {
         private readonly HttpClient _httpClient = new HttpClient();
+        private ILogger<WebScrapperService> _logger;
+
+        public WebScrapperService(ILogger<WebScrapperService> logger)
+        {
+            _logger = logger != null ? logger : throw new ArgumentNullException();
+        }
 
         /// <summary>
         /// Validates url, sending request to url, prepares result
@@ -18,10 +25,22 @@ namespace IDIQTest.Infrastructure.Services
         /// <returns>Result of scrapping</returns>
         public async Task<ScrapResult> GetContentAsync(string url)
         {
-            ValidateUrl(url);
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            var content = await SendUrlRequest(request);
-            return new ScrapResult(url, content);
+            var methodName = nameof(GetContentAsync);
+
+            try
+            {
+                _logger.LogInformation($"{methodName} started");
+                ValidateUrl(url);
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                var content = await SendUrlRequest(request);
+                _logger.LogInformation($"{methodName} finished");
+                return new ScrapResult(url, content);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"{ex.GetType()} occured. Message : {ex.Message}");
+                throw;
+            }
         }
 
         /// <summary>
