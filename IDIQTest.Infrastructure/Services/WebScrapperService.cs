@@ -3,6 +3,7 @@ using IDIQTest.Domain.Model;
 using IDIQTest.Domain.Services;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -34,12 +35,13 @@ namespace IDIQTest.Infrastructure.Services
                 var request = new HttpRequestMessage(HttpMethod.Get, url);
                 var content = await SendUrlRequest(request);
                 _logger.LogInformation($"{methodName} finished");
-                return new ScrapResult(url, content);
+                return new ScrapResult(url, content); ;
             }
             catch(Exception ex)
             {
-                _logger.LogError($"{ex.GetType()} occured. Message : {ex.Message}");
-                throw;
+                var message = $"{ex.GetType()} occured. Message : {ex.Message}";
+                _logger.LogError(message);
+                return new ScrapResult(url, message, true);
             }
         }
 

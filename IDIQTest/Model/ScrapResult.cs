@@ -8,8 +8,18 @@
             Content = content;
         }
 
+        public ScrapResult(string url, string content, bool hasException)
+        {
+            Url = url;
+            Content = content;
+            HasException = hasException;
+        }
+
         public string Url { get; }
 
         public string Content { get; }
+
+        public bool HasException { get; }
+
     }
 }

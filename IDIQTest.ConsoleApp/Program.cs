@@ -2,6 +2,7 @@
 using IDIQTest.Domain.Services;
 using IDIQTest.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
@@ -82,9 +83,21 @@ namespace IDIQTest.ConsoleApp
             {
                 _baseDirectory = _configSettings.BaseFolder;
             }
-
-            _webScrapperService = new WebScrapperService();
+            var logger = CreateLogger<WebScrapperService>();
+            _webScrapperService = new WebScrapperService(logger);
             _fileSaverService = new FileSaverService(_baseDirectory);
+        }
+
+        private static ILogger<T> CreateLogger<T>()
+        {
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddFilter("Microsoft", LogLevel.Warning)
+                    .AddFilter("System", LogLevel.Warning)
+                    .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug);
+            });
+            return loggerFactory.CreateLogger<T>();
         }
 
         /// <summary>

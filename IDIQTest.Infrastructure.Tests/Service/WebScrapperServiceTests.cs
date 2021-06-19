@@ -1,6 +1,8 @@
 using IDIQTest.Domain.Exceptions;
 using IDIQTest.Domain.Services;
 using IDIQTest.Infrastructure.Services;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -9,10 +11,12 @@ namespace IDIQTest.Infrastructure.Tests.Service
     public class WebScrapperServiceTests
     {
         private IWebScrapperService _service;
+        private Mock<ILogger<WebScrapperService>> _logger;
 
         public WebScrapperServiceTests()
         {
-            _service = new WebScrapperService();
+            _logger = new Mock<ILogger<WebScrapperService>>();
+            _service = new WebScrapperService(_logger.Object);
         }
 
         [Fact]

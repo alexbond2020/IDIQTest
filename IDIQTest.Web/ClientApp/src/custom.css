@@ -1,0 +1,89 @@
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #E01A76;
+}
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.layout {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+.center {
+    text-align: center;
+}
+
+.red{
+    color: red
+}
+
+.green {
+    color: green
+}
+
+.exceptionContent {
+    max-height: 150px;
+    overflow-y: scroll;
+}
+
+.container {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+.even {
+    background-color: #eaf7fb;
+}
+
+.odd {
+    background-color: #dbffd9;
+}
+
+.url {
+}
+
+.scrapContent {
+    max-height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-style: ridge;
+}
+.exceptionContent {
+    background-color: #fbe3e5;
+    border-style: ridge;
+    overflow:hidden
+}
+
+.right {
+    float: right;
+}
